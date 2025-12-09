@@ -1,5 +1,11 @@
 # 小学数学推理微调项目
-大模型课程大作业，本项目使用LoRA方法对Qwen2.5-7B-Instruct模型进行小学数学推理能力的微调。
+大模型课程大作业，本项目实现了大语言模型在数学推理任务上的完整训练流程，包括：
+
+1. **监督微调 (SFT)** - 使用LoRA在GSM8K数据集上微调
+2. **DPO对齐** - 使用偏好数据进行直接偏好优化
+3. **提示工程评估** - 对比CoT、ToT等多种提示策略
+4. **系统演示** - 交互式数学问答界面
+
 ## 问题记录
 问题记录1：国内连接不了HF下载模型
 
@@ -19,16 +25,22 @@ _HF_DEFAULT_ENDPOINT = "https://hf-mirror.com"
 ```
 llm-math-finetune/
 ├── src/
-│   ├── train.py          # 训练脚本
-│   └── evaluate.py       # 评估脚本
+│   ├── train.py              # SFT训练脚本
+│   ├── train_dpo.py          # DPO对齐训练脚本
+│   ├── evaluate.py           # 模型评估脚本
+│   ├── evaluate_prompts.py   # 提示工程评估脚本
+│   └── demo.py               # 交互式演示系统
 ├── configs/
-│   └── config.yaml       # 配置文件
-├── data/                 # 数据目录（可选）
-├── outputs/              # 输出目录
-├── requirements.txt      # Python依赖
-├── run_train.sh         # 训练运行脚本
-├── run_eval.sh          # 评估运行脚本
-└── README.md
+│   └── config.yaml           # 配置文件
+├── data/
+│   ├── sample_chinese_math.json   # 示例中文数学数据
+│   └── preference_data.json       # DPO偏好数据
+├── run_train.sh             # SFT训练
+├── run_dpo.sh               # DPO训练
+├── run_eval.sh              # 模型评估
+├── run_prompt_eval.sh       # 提示工程评估
+├── run_demo.sh              # 系统演示
+└── requirements.txt
 ```
 
 ## 环境配置
@@ -63,17 +75,34 @@ python src/train.py \
     --learning_rate 2e-4
 ```
 
-### 2. 运行评估
+### 2. DPO对齐训练
 
 ```bash
-# 评估微调模型
-bash run_eval.sh
+# 在SFT之后运行
+bash run_dpo.sh
+```
 
-# 对比基础模型和微调模型
-bash run_eval.sh --compare
+### 3. 提示工程评估
 
-# 指定评估样本数
-bash run_eval.sh --samples 500 --compare
+```bash
+# 评估基础模型
+bash run_prompt_eval.sh
+
+# 评估微调后模型
+bash run_prompt_eval.sh --lora ./outputs/qwen-math-lora --samples 200
+```
+
+### 4. 系统演示
+
+```bash
+# 命令行交互
+bash run_demo.sh --cli
+
+# Web界面
+bash run_demo.sh --web --port 7860
+
+# 使用微调模型
+bash run_demo.sh --web --lora ./outputs/qwen-math-lora
 ```
 
 ## 配置说明
@@ -106,10 +135,22 @@ bash run_eval.sh --samples 500 --compare
 ]
 ```
 
+### 提示策略对比
+
+| 策略 | 说明 |
+|------|------|
+| Zero-shot | 直接问答 |
+| Few-shot | 给出示例 |
+| CoT | 链式思维推理 |
+| Zero-shot CoT | "让我们一步步思考" |
+| Structured CoT | 结构化推理格式 |
+| ToT | 树状思维（多角度） |
+
 ## 硬件要求
 
-- GPU：建议16GB以上显存（使用LoRA）
-- 本实验用RTX 5880 Ada 48GB显存完成
+- GPU：建议16GB以上显存
+- 本实验用RTX 5880 Ada 48GB显存可使用更大batch size
+
 
 ## 预期结果
 
