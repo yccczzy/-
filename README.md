@@ -109,6 +109,7 @@ bash run_eval.sh --samples 500 --compare
 ## 硬件要求
 
 - GPU：建议16GB以上显存（使用LoRA）
+- 本实验用RTX 5880 Ada 48GB显存完成
 
 ## 预期结果
 
