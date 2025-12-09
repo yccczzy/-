@@ -23,7 +23,6 @@ llm-math-finetune/
 │   └── config.yaml       # 配置文件
 ├── data/                 # 数据目录（可选）
 ├── outputs/              # 输出目录
-├── latex/                # LaTeX报告
 ├── requirements.txt      # Python依赖
 ├── run_train.sh         # 训练运行脚本
 ├── run_eval.sh          # 评估运行脚本
@@ -32,11 +31,11 @@ llm-math-finetune/
 
 ## 环境配置
 
-### 1. 创建虚拟环境（推荐）
+### 1. 创建虚拟环境
 
 ```bash
-conda create -n llm-math python=3.10
-conda activate llm-math
+conda create -n llm python=3.10
+conda activate llm
 ```
 
 ### 2. 安装依赖
@@ -108,7 +107,6 @@ bash run_eval.sh --samples 500 --compare
 ## 硬件要求
 
 - GPU：建议16GB以上显存（使用LoRA）
-- 48GB显存可以使用更大的batch size或不使用量化
 
 ## 预期结果
 
