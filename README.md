@@ -89,7 +89,11 @@ bash run_dpo.sh
 bash run_prompt_eval.sh
 
 # 评估微调后模型
-bash run_prompt_eval.sh --lora ./outputs/qwen-math-lora --samples 200
+bash run_prompt_eval.sh --lora ./outputs/qwen-math-lora --samples 100
+
+# 评估DPo模型
+bash run_prompt_eval.sh --lora ./outputs/qwen-math-dpo --samples 100
+
 ```
 
 ### 4. 系统演示
