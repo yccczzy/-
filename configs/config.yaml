@@ -1,0 +1,59 @@
+# 小学数学推理微调配置文件
+
+# ==================== 模型配置 ====================
+model:
+  name: "Qwen/Qwen2.5-7B-Instruct"  # 基础模型
+  max_length: 512                    # 最大序列长度
+  use_4bit: false                    # 是否使用4bit量化（48GB显存不需要）
+
+# ==================== LoRA配置 ====================
+lora:
+  r: 16                              # LoRA秩
+  alpha: 32                          # LoRA alpha
+  dropout: 0.05                      # Dropout率
+  target_modules:                    # 目标模块
+    - "q_proj"
+    - "k_proj"
+    - "v_proj"
+    - "o_proj"
+    - "gate_proj"
+    - "up_proj"
+    - "down_proj"
+
+# ==================== 训练配置 ====================
+training:
+  output_dir: "./outputs/qwen-math-lora"
+  num_epochs: 3
+  batch_size: 4
+  gradient_accumulation_steps: 4     # 有效批次大小 = 4 * 4 = 16
+  learning_rate: 2.0e-4
+  warmup_ratio: 0.1
+  weight_decay: 0.01
+  max_grad_norm: 1.0
+  
+  # 日志和保存
+  logging_steps: 10
+  save_steps: 100
+  eval_steps: 100
+  save_total_limit: 3
+  
+  # 精度
+  fp16: true
+  bf16: false
+  
+  # 随机种子
+  seed: 42
+
+# ==================== 数据配置 ====================
+data:
+  dataset: "gsm8k"                   # 数据集名称
+  train_split: "train"
+  test_split: "test"
+  # custom_path: "./data/custom_math.json"  # 自定义数据集路径
+
+# ==================== 评估配置 ====================
+evaluation:
+  num_samples: 200                   # 评估样本数
+  temperature: 0.1
+  max_new_tokens: 512
+  do_sample: false
