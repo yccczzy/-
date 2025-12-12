@@ -27,7 +27,6 @@ llm-math-finetune/
 ├── src/
 │   ├── train.py              # SFT训练脚本
 │   ├── train_dpo.py          # DPO对齐训练脚本
-│   ├── evaluate.py           # 模型评估脚本
 │   ├── evaluate_prompts.py   # 提示工程评估脚本
 │   └── demo.py               # 交互式演示系统
 ├── configs/
@@ -37,7 +36,6 @@ llm-math-finetune/
 │   └── preference_data.json       # DPO偏好数据
 ├── run_train.sh             # SFT训练
 ├── run_dpo.sh               # DPO训练
-├── run_eval.sh              # 模型评估
 ├── run_prompt_eval.sh       # 提示工程评估
 ├── run_demo.sh              # 系统演示
 └── requirements.txt
